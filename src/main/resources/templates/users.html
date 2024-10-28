@@ -1,28 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>User Profile</title>
+    <title>Users</title>
 </head>
+
 <body>
-<h1>Your Profile</h1>
+<h1 style="width: 30%">All Users:</h1>
 <table th:border="3">
     <thead>
     <tr>
+        <th style="width: 7%; background: olivedrab">ID</th>
         <th style="width: 25%; background: olivedrab">Name</th>
         <th style="width: 25%; background: olivedrab">LastName</th>
         <th style="width: 14%; background: olivedrab">Age</th>
         <th style="width: 15%; background: olivedrab">Password</th>
+        <th style="width: 55%; background: olivedrab">Functional</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
+    <tr th:each="user : ${allUsers}">
+        <td style="text-align: center; background: #d3ff88" th:text="${user.id}"></td>
         <td style="text-align: center; background: #d3ff88" th:text="${user.userName}"></td>
         <td style="text-align: center; background: #d3ff88" th:text="${user.lastName}"></td>
         <td style="text-align: center; background: #d3ff88" th:text="${user.age}"></td>
         <td style="text-align: center; background: #d3ff88" th:text="${user.password}"></td>
+        <td>
+            <a style="text-align: center; background: #d3ff88" th:href="@{update/{id}(id=${user.id})}">Edit User</a> |
+            <a style="text-align: center; background: #d3ff88" th:href="@{delete/{id}(id=${user.id})}">Delete User</a>
+        </td>
     </tr>
     </tbody>
 </table>
+
+<br/>
+<a href="/admin/add">Add User</a>
+
 </body>
 </html>
