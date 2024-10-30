@@ -30,6 +30,10 @@ public class UserService {
         myUserDetalisService.deleteUser(id);
     }
 
+    public User updateUserById(Long id, User user) {
+        return myUserDetalisService.updateUser(user);
+    }
+
     public User updateUser(User user) {
         return myUserDetalisService.updateUser(user);
     }
