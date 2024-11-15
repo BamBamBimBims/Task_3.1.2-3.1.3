@@ -44,6 +44,7 @@ public class MyUserDetalisService implements UserDetailsService {
         peopleRepository.deleteById(id);
     }
 
+
     public User updateUser(User user) {
         return peopleRepository.save(user);
     }

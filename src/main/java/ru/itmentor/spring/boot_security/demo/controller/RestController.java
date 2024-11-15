@@ -34,7 +34,7 @@ public class RestController {
 
     // ДОБАВЛЕНИЕ НОВОГО ЮЗЕРА
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/admin/users")
+    @PostMapping("/admin/users/save")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         if (!isValidUser(user)) {
             return ResponseEntity.badRequest().body(null);
@@ -45,7 +45,7 @@ public class RestController {
 
     // УДАЛЕНИЕ ЮЗЕРА ПО ID
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/admin/users/{id}")
+    @DeleteMapping("/admin/users/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
@@ -53,14 +53,26 @@ public class RestController {
 
     // ОБНАВЛЕНИЕ ЮЗЕРА ПО ID
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/admin/users/{id}")
+    @PutMapping("/admin/users/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
                                            @RequestBody User user) {
         if (!isValidUser(user)) {
             return ResponseEntity.badRequest().body(null);
         }
-        User updatedUser = userService.updateUserById(id, user);
-        return ResponseEntity.ok(updatedUser);
+        Optional<User> existingUserOptional = userService.getUserById(id);
+
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+            existingUser.setUserName(user.getUserName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setAge(user.getAge());
+            existingUser.setPassword(user.getPassword());
+
+            User updatedUser = userService.saveUser(existingUser);
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // ИНФО О ТЕКУЩЕМ ЮЗЕРЕ
